@@ -12,9 +12,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = os.environ['HRABBIT_SECRET']
 api = Api(app)
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
 
 api.add_resource(User, '/user/')
 api.add_resource(GetUser, '/getuser/<string:msg_id>')
