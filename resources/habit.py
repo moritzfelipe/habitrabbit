@@ -1,6 +1,5 @@
 from flask import request
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
 from models.habit import HabitModel
 from models.user import UserModel
 from datetime import datetime

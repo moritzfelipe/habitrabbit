@@ -1,7 +1,6 @@
 import os
 from flask import Flask
 from flask_restful import Api
-from flask_jwt import JWT
 
 from resources.habit import CreateHabit, DeleteHabit, UpdateHabit
 from resources.user import User, UserList, GetUser
