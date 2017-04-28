@@ -55,7 +55,7 @@ class CreateHabit(Resource):
         
         date = datetime.utcnow()
         date = date.date()
-        date = datetime(2017, 4, 11, 15, 8, 24, 78915)
+        date = datetime(2017, 4, 24, 15, 8, 24, 78915)
         
         habit.habit_update_date = date
         habit.habit_points = data['habit_points']

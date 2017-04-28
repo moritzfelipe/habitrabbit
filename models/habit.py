@@ -81,6 +81,8 @@ class HabitModel(db.Model):
             return response_habit_already_reported(self)            
         
         self.calc_habit_not_done()
+        self.habit_points = self.habit_points-1
+        self.save_to_db()
         return response_habit_not_done_today(self)
 
     #calculation for habits not done
@@ -89,47 +91,48 @@ class HabitModel(db.Model):
         x = x/10
         x = math.trunc(x)
         x = x*10
-        self.habit_points = x
+        #habit points get plus a point because when reported it is done one more time should be made nicer in next release
+        self.habit_points = x+1
         self.habit_update_date = datetime.utcnow()        
         self.save_to_db()
         return
     
     #calculation of obi level, needs to be replaced as dictionary
     def obi_level(self):
-        if self.habit_points <= 0:
+        if self.habit_points >= 0:
             level = "white"
         
-        if self.habit_points < 10:
+        if self.habit_points > 10:
             level = "yellow"
 
-        if self.habit_points < 20:
+        if self.habit_points > 20:
             level = "orange"
 
-        if self.habit_points < 30:
+        if self.habit_points > 30:
             level = "green"
 
-        if self.habit_points < 40:
+        if self.habit_points > 40:
             level = "violett"
 
-        if self.habit_points < 50:
+        if self.habit_points > 50:
             level = "blue"
             
-        if self.habit_points < 60:
+        if self.habit_points > 60:
             level = "brown"
             
-        if self.habit_points < 70:
+        if self.habit_points > 70:
             level = "brown"
 
-        if self.habit_points < 80:
+        if self.habit_points > 80:
             level = "brown"
  
-        if self.habit_points < 90:
+        if self.habit_points > 90:
             level = "black"      
             
-        if self.habit_points < 100:
+        if self.habit_points > 100:
             level = "red-white"   
 
-        if self.habit_points < 110:
+        if self.habit_points > 110:
             level = "red"   
         
         return level
