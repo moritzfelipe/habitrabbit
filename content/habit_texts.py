@@ -20,7 +20,8 @@ def response_habit_done_level_up(habit, habit_user_first_name):
     return { "text": "Im proud of you {}-san".format(habit_user_first_name)+"! You reach next skill level for training '{}'. ".format(habit.habit_name)+"You earned your {} obi with ".format(habit.obi_level())+"{} point.".format(habit.habit_points)}
 
 def response_habit_done_first_point(habit, habit_user_first_name):
-    return { "messages": [ {"text": "Good work {}-san! You earned first point for training '{}'. ".format(habit_user_first_name,habit.habit_name)}], "redirect_to_blocks": ["first_point"]}
+    #return { "messages": [ {"text": "Good work {}-san! You earned first point for training '{}'.".format(habit_user_first_name,habit.habit_name)}], "redirect_to_blocks": ["first_point"]}
+    return { "messages": [ {"text": "Good work {}-san! You earned first point for training"}]}
    
 #create habit
 def response_already_created_habit_with_this_name(habit_name):
