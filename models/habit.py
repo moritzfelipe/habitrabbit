@@ -40,7 +40,7 @@ class HabitModel(db.Model):
                     self.save_to_db() 
                     habit_user_id = UserModel.find_by_user_id(self.user_id)
                     habit_user_first_name = habit_user_id.fb_first_name
-                    return response_habit_done(self,habit_user_first_name)
+                    return response_habit_done_first_point(self,habit_user_first_name)
             else:
                 return response_habit_already_reported(self)
             
