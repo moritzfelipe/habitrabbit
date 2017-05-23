@@ -2,7 +2,7 @@ from db import db
 from datetime import datetime
 import math
 from models.user import UserModel
-from content.habit_texts import response_habit_already_reported, response_habit_not_done_at_least_friday, response_habit_not_done_yesterday, response_habit_not_done_today, response_habit_done, response_habit_done_level_up
+from content.habit_texts import response_habit_already_reported, response_habit_not_done_at_least_friday, response_habit_not_done_yesterday, response_habit_not_done_today, response_habit_done, response_habit_done_level_up, response_habit_done_first_point
 
 #database for habits
 class HabitModel(db.Model):
@@ -68,7 +68,11 @@ class HabitModel(db.Model):
         habit_user_id = UserModel.find_by_user_id(self.user_id)
         habit_user_first_name = habit_user_id.fb_first_name
 
-        #habit done and level up        
+        #habit done and first point  
+        if self.habit_points == 1:
+            return response_habit_done_first_point(self,habit_user_first_name)
+
+        #habit done and level up  
         if self.habit_points % 10 == 0:
             return response_habit_done_level_up(self,habit_user_first_name)
 
@@ -91,7 +95,7 @@ class HabitModel(db.Model):
         x = x/10
         x = math.trunc(x)
         x = x*10
-        #habit points get plus a point because when reported it is done one more time should be made nicer in next release
+        #habit points get plus a point because when reported it is done one more time. Should be made nicer in next release
         self.habit_points = x+1
         self.habit_update_date = datetime.utcnow()        
         self.save_to_db()
@@ -138,7 +142,7 @@ class HabitModel(db.Model):
         return level
     
     
-    #Selection of habits
+#Selection of habits
     
     #Selection of habits to delete
     def json_get_habits_for_delete(self):
