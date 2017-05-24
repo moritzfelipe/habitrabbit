@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource, reqparse
 from models.habit import HabitModel
 from models.user import UserModel
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from content.habit_texts import response_already_created_habit_with_this_name, response_habit_created, response_habit_deleted, response_error
 
@@ -55,13 +55,14 @@ class CreateHabit(Resource):
         
         date = datetime.utcnow()
         date = date.date()
-        date = datetime(2017, 4, 24, 15, 8, 24, 78915)
+        date = datetime(2017, 5, 17, 15, 8, 24, 78915)
         
         habit.habit_update_date = date
         habit.habit_points = data['habit_points']
         habit.save_to_db()
 
         return habit.json()
+
 
 #class for deleting habits
 class DeleteHabit(Resource):
@@ -101,7 +102,7 @@ class DeleteHabit(Resource):
         return {'messages': list(map(lambda x: x.json_get_habits_for_delete(), HabitModel.query.filter_by(user_id=habit_user_id.user_id).all()))}
 
 
-#classs for updating habits
+#class for updating habits
 class UpdateHabit(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('messenger user id',
@@ -140,5 +141,5 @@ class UpdateHabit(Resource):
         #update habit as trained
         if data['Update_Habit']:
             habit = HabitModel.find_by_name_and_id(data['Update_Habit'],habit_user_id.user_id)
-            return {'messages': list(map(lambda x: x.update_habits_done(), HabitModel.query.filter_by(user_id=habit_user_id.user_id,habit_name=habit.habit_name).all()))}            
+            return list(map(lambda x: x.update_habits_done(), HabitModel.query.filter_by(user_id=habit_user_id.user_id,habit_name=habit.habit_name).all()))           
 
