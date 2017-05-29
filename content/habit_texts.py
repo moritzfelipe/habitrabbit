@@ -2,7 +2,7 @@
 
 #update habit
 def response_habit_already_reported(habit):
-    return { "text": "No no, training for '{}' already reported today.".format(habit.habit_name)}
+    return { "messages": [ {"text": "No no, training for '{}' already reported today.".format(habit.habit_name)}] }
     
 def response_habit_not_done_at_least_friday(habit):
     return {
@@ -38,10 +38,10 @@ def response_habit_not_done_yesterday(habit):
 
 
 def response_habit_not_done_today(habit):
-    return { "text": "You not do training today. Will have to start training for '{}' with ".format(habit.habit_name)+"{}".format(habit.obi_level())+" obi from beginning with {} point.".format(habit.habit_points)}
+    return { "messages": [ {"text": "You not do training today. Will have to start training for '{}' with ".format(habit.habit_name)+"{}".format(habit.obi_level())+" obi from beginning with {} point.".format(habit.habit_points)}] }
 
 def response_habit_done(habit, habit_user_first_name):
-    return { "text": "Good work {}-san".format(habit_user_first_name)+"! You improved with training for '{}'. ".format(habit.habit_name)+"You got {} point and ".format(habit.habit_points)+"{} obi.".format(habit.obi_level())}
+    return { "messages": [ { "text": "Good work {}-san".format(habit_user_first_name)+"! You improved with training for '{}'. ".format(habit.habit_name)+"You got {} point and ".format(habit.habit_points)+"{} obi.".format(habit.obi_level())}] }
 
 def response_habit_done_level_up(habit, habit_user_first_name):
         obi = ""
