@@ -18,6 +18,7 @@ if __name__ == '__main__':
 
     with app.app_context():
         
+        #if its a weekday
         if datetime.utcnow().isoweekday() in range(1, 6):
             bot_id = "57da448b9d5d8a3fd79ce9a7"
             chatfuel_token = os.environ['CHATFUEL_TOKEN']
@@ -25,7 +26,7 @@ if __name__ == '__main__':
             
             #get timezone where it's 22:00
             utc = datetime.utcnow().hour
-            utc = 20
+            #utc = 20
             
             if utc < 12:
                 timezone_to_message = -2 - utc
