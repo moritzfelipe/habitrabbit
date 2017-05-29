@@ -19,9 +19,8 @@ class UserModel(db.Model):
         self.fb_last_name = fb_last_name
         self.fb_timezone = fb_timezone
         
-
     def json(self):
-        return {'msg_id': self.msg_id, 'fb_first_name': self.fb_first_name, 'fb_last_name': self.fb_last_name, 'fb_timezone': self.fb_timezone,
+        return {'user_id': self.user_id, 'msg_id': self.msg_id, 'fb_first_name': self.fb_first_name, 'fb_last_name': self.fb_last_name, 'fb_timezone': self.fb_timezone,
         'habits': [habit.json() for habit in self.habits.all()]}
 
     @classmethod

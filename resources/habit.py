@@ -55,7 +55,7 @@ class CreateHabit(Resource):
         
         date = datetime.utcnow()
         date = date.date()
-        date = datetime(2017, 5, 17, 15, 8, 24, 78915)
+        date = datetime(2017, 5, 25, 11, 8, 24, 78915)
         
         habit.habit_update_date = date
         habit.habit_points = data['habit_points']
@@ -141,5 +141,5 @@ class UpdateHabit(Resource):
         #update habit as trained
         if data['Update_Habit']:
             habit = HabitModel.find_by_name_and_id(data['Update_Habit'],habit_user_id.user_id)
-            return list(map(lambda x: x.update_habits_done(), HabitModel.query.filter_by(user_id=habit_user_id.user_id,habit_name=habit.habit_name).all()))           
-
+            return list(map(lambda x: x.update_habits_done(), HabitModel.query.filter_by(user_id=habit_user_id.user_id,habit_name=habit.habit_name).all()))[0]
+    

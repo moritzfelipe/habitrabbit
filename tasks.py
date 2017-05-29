@@ -1,5 +1,6 @@
 import requests
 import os
+import time
 from flask import Flask
 from flask_restful import Api
 from datetime import datetime, timedelta
@@ -24,7 +25,7 @@ if __name__ == '__main__':
             
             #get timezone where it's 22:00
             utc = datetime.utcnow().hour
-            #utc = 20
+            utc = 20
             
             if utc < 12:
                 timezone_to_message = -2 - utc
@@ -38,13 +39,16 @@ if __name__ == '__main__':
             update_time_42h = datetime.utcnow() - timedelta(hours=42)
             
             #get users in the timezone where it's 22:00
-            for user in UserModel.query.filter_by(fb_timezone=timezone_to_message).all():
+            for user in UserModel.query.filter_by(fb_timezone=str(timezone_to_message)).all():
+
                 #get habits of this user
                 new_user = UserModel.find_by_msg_id(user.msg_id)
                 #check if habits have right time
                 habits_list = []
                 for habits in HabitModel.query.filter_by(user_id=new_user.user_id).filter(HabitModel.habit_update_date>update_time_42h).filter(HabitModel.habit_update_date<update_time_22h).all():
                     habits_list.append(habits.habit_name)
+                
+                message = None
                 
                 if len(habits_list) == 1:
                     message = "押忍 {}-san, you not report your habit {} today, you do it?".format(new_user.fb_first_name,habits_list[0])
@@ -54,7 +58,11 @@ if __name__ == '__main__':
     
                 if len(habits_list) > 2:
                     message = "押忍 {}-san, you not report your habit {} and {} today, did you train?".format(new_user.fb_first_name,", ".join(habits_list[:-1]), habits_list[-1])
-    
-                r = requests.post('https://api.chatfuel.com/bots/{}/users/{}/send?chatfuel_token={}&chatfuel_block_id={}&message_content={}'.format(bot_id,user.msg_id,chatfuel_token,chatfuel_block_id,message), data={})
+                
+                if message:
+                    r = requests.post('https://api.chatfuel.com/bots/{}/users/{}/send?chatfuel_token={}&chatfuel_block_id={}&message_content={}'.format(bot_id,user.msg_id,chatfuel_token,chatfuel_block_id,message), data={})
+                    time.sleep(1)
+                else:
+                    print('no message to send for {} {}'.format(user.fb_first_name, user.fb_last_name))
     
         
