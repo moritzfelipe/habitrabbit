@@ -101,6 +101,47 @@ class HabitModel(db.Model):
         self.save_to_db()
         return
     
+     #calculation of obi level, needs to be replaced as dictionary
+    def obi_level(self):
+         if self.habit_points >= 0:
+             level = "white"
+        
+         if self.habit_points > 10:
+             level = "yellow"
+
+         if self.habit_points > 20:
+             level = "orange"
+
+         if self.habit_points > 30:
+             level = "green"
+
+         if self.habit_points > 40:
+             level = "violett"
+
+         if self.habit_points > 50:
+             level = "blue"
+            
+         if self.habit_points > 60:
+             level = "brown"
+            
+         if self.habit_points > 70:
+             level = "brown"
+
+         if self.habit_points > 80:
+             level = "brown"
+ 
+         if self.habit_points > 90:
+             level = "black"      
+            
+         if self.habit_points > 100:
+             level = "red-white"   
+
+         if self.habit_points > 110:
+             level = "red"   
+        
+         return level
+    
+    
 #Selection of habits
     
     #Selection of habits to delete
