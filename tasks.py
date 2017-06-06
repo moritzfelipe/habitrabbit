@@ -36,17 +36,20 @@ if __name__ == '__main__':
             #print(timezone_to_message)
             #habit_update_date=>max_update_date
             
-            update_time_22h = datetime.utcnow() - timedelta(hours=22)
-            update_time_42h = datetime.utcnow() - timedelta(hours=42)
-            
+            update_time_frame_start = datetime.utcnow() - timedelta(hours=22)
+            if datetime.today().weekday() == 0:
+                update_time_frame_end = datetime.utcnow() - timedelta(hours=94)
+            else:
+                update_time_frame_end = datetime.utcnow() - timedelta(hours=46)
+
             #get users in the timezone where it's 22:00
             for user in UserModel.query.filter_by(fb_timezone=str(timezone_to_message)).all():
 
                 #get habits of this user
                 new_user = UserModel.find_by_msg_id(user.msg_id)
-                #check if habits have right time
+                #check if habits have right time1
                 habits_list = []
-                for habits in HabitModel.query.filter_by(user_id=new_user.user_id).filter(HabitModel.habit_update_date>update_time_42h).filter(HabitModel.habit_update_date<update_time_22h).all():
+                for habits in HabitModel.query.filter_by(user_id=new_user.user_id).filter(HabitModel.habit_update_date>update_time_frame_end).filter(HabitModel.habit_update_date<update_time_frame_start).all():
                     habits_list.append(habits.habit_name)
                 
                 message = None
