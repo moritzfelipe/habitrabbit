@@ -136,12 +136,7 @@ class UpdateHabit(Resource):
 
         #get habits to update some habits as trained
         if data['habits_trained']=="some":
-            
-            seconds_since_midnight = (datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds()
-            hours_since_midnight_utc = seconds_since_midnight/3600
-            hours_since_midnight_user = hours_since_midnight_utc+int(habit_user_id.fb_timezone)
-            update_time = datetime.utcnow() - timedelta(hours=hours_since_midnight_user)
-            return {'messages': list(map(lambda x: x.json_get_habits_for_update(), HabitModel.query.filter_by(user_id=habit_user_id.user_id).filter(HabitModel.habit_update_date<update_time).all()))}    
+            return {'messages': list(map(lambda x: x.json_get_habits_for_update(), HabitModel.query.filter_by(user_id=habit_user_id.user_id).all()))}    
 
         #update habit as trained
         if data['Update_Habit']:

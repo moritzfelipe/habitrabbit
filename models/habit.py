@@ -1,5 +1,5 @@
 from db import db
-from datetime import datetime
+from datetime import datetime, timedelta
 import math
 from models.user import UserModel
 from content.habit_texts import response_habit_already_reported, response_habit_not_done_at_least_friday, response_habit_not_done_yesterday, response_habit_not_done_today, response_habit_done, response_habit_done_level_up, response_habit_done_first_point
@@ -171,26 +171,61 @@ class HabitModel(db.Model):
 
     #Selection of habits to update
     def json_get_habits_for_update(self):
-        return {
-            "attachment": {
-                "payload":{
-                  "template_type": "button",
-                  "text": "Habit: \n'{}' \ntrain today?".format(self.habit_name),
-                  "buttons": [
-                    {
-                        "set_attributes": 
-                            {
-                              "Update_Habit": "{}".format(self.habit_name),
-                            },
-                          "block_names": ["Habit done"],
-                          "type": "show_block",
-                          "title": "yes",
-                    }
-                  ]
-                },
-                "type": "template"
+        habit_user_id = UserModel.find_by_user_id(self.user_id)
+        seconds_since_midnight = (datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds()
+        hours_since_midnight_utc = seconds_since_midnight/3600
+        hours_since_midnight_user = hours_since_midnight_utc+int(habit_user_id.fb_timezone)
+        update_time = datetime.utcnow() - timedelta(hours=hours_since_midnight_user)
+        
+        if datetime.today().date() == self.habit_creation_date.date() and self.habit_points == 0:
+            return {
+                "attachment": {
+                    "payload":{
+                      "template_type": "button",
+                      "text": "Habit: \n'{}' \ntrain already today for first time?".format(self.habit_name),
+                      "buttons": [
+                        {
+                            "set_attributes": 
+                                {
+                                  "Update_Habit": "{}".format(self.habit_name),
+                                },
+                              "block_names": ["Habit done"],
+                              "type": "show_block",
+                              "title": "yes",
+                        }
+                      ]
+                    },
+                    "type": "template"
+                }
+            }        
+        
+        
+        if self.habit_update_date<update_time:
+            return {
+                "attachment": {
+                    "payload":{
+                      "template_type": "button",
+                      "text": "Habit: \n'{}' \ntrain today?".format(self.habit_name),
+                      "buttons": [
+                        {
+                            "set_attributes": 
+                                {
+                                  "Update_Habit": "{}".format(self.habit_name),
+                                },
+                              "block_names": ["Habit done"],
+                              "type": "show_block",
+                              "title": "yes",
+                        }
+                      ]
+                    },
+                    "type": "template"
+                }
             }
-        }
+            
+        else :
+            return {
+                "text": "You already reported '{}' today it has {} point.".format(self.habit_name,self.habit_points)
+            }
 
 
     @classmethod
