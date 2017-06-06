@@ -34,6 +34,7 @@ class HabitModel(db.Model):
     def update_habits_done(self):
         #the habit was already repoted this day
         if self.habit_update_date.date() == datetime.today().date():
+            print("already reported")
             #its the first day of training the habit
             if datetime.today().date() == self.habit_creation_date.date() and self.habit_points == 0:
                     self.habit_points = self.habit_points+1
@@ -42,6 +43,7 @@ class HabitModel(db.Model):
                     habit_user_first_name = habit_user_id.fb_first_name
                     return response_habit_done_first_point(self,habit_user_first_name)
             else:
+                print("already reported2")
                 return response_habit_already_reported(self)
             
 
@@ -173,7 +175,7 @@ class HabitModel(db.Model):
             "attachment": {
                 "payload":{
                   "template_type": "button",
-                  "text": "Habit: '{}' train today?".format(self.habit_name),
+                  "text": "Habit: \n'{}' \ntrain today?".format(self.habit_name),
                   "buttons": [
                     {
                         "set_attributes": 
