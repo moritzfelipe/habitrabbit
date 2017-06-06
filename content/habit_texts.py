@@ -32,7 +32,7 @@ def response_habit_not_done_yesterday(habit):
                         }
                       }
                     },
-                    {"text": "You not do training on yesterday. Will have to start training for '{}' with last obi from beginning with {} point.".format(habit.habit_name,habit.habit_points)}
+                    {"text": "You not do training yesterday. Will have to start training for '{}' with last obi from beginning with {} point.".format(habit.habit_name,habit.habit_points)}
                 ]
             }
 
